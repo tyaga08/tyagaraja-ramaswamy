@@ -3,7 +3,7 @@
   <!-- Hi, Jon Here. Please DELETE the two <script> tags below if you use this HTML, otherwise my analytics will track your page -->
   <!-- Global site tag (gtag.js) - Google Analytics -->
 
-  <title>testing</title>
+  <title>Featureless Object Detection Using Triangulation</title>
   
   <meta name="author" content="Tyagaraja Ramaswamy">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,11 +19,10 @@
         <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
           <tr style="padding:0px">
               <p style="text-align:center">
-                <name>test project</name>
+                <name>Featureless Object Detection Using Triangulation</name>
               </p>
               <p style="text-align:center">
-                <a href="">git repo</a> &nbsp/&nbsp
-                <a href="">video</a>
+                <a href="https://github.com/tyaga08/featureless_object_detection_using_triangulation">git repo</a>
               </p>
           </tr>
         </tbody></table>
@@ -32,18 +31,186 @@
             <td style="padding:20px;width:100%;vertical-align:middle">
               <heading>Introduction</heading>
               <p>
-                Put the introduction here
+                In this project I tried using classical geometry based computer vision for detecting 2-d colored brontosaurus. Figure 1
+                depicts the target object that has dimensions of 8.4X6.1. Due to its highly 2-dimensional shape, the thickness can be 
+                omitted from our models (4mm).
               </p>
             </td>
-          </tr>
+            </tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+                <a href="../../../my_images/projects/featureless_object_detection/fig1.png"><img style="width:50%;max-width:50%" alt="Fig 1" src="../../../my_images/projects/featureless_object_detection/fig1.png" class="hoverZoomLink"></a>
+            </td>
           <tr>
               <td style="padding:20px;width:100%;vertical-align:middle">
-                <heading>Methodology</heading>
-                <p>
-                  Put the methodology here
-                </p>
-              </td>
-          </tr>
+                    <heading>Methodology</heading>
+                    <p>
+                        Triangulation is a method that is generally used for pathfinding algorithms. If there is a set of points in a plane 
+                        and the path has to be found to traverse from one point to the other, triangulating these points helps find the 
+                        required path. One of the triangulation methods, Delaunay triangulation, can be used for object detection.
+                    </p>
+                    <p>
+                        Delaunay Triangulation: The triangulation, f(t), of a set of discrete points P in a plane, is said to be Delaunay 
+                        Triangulation iff no point in P is inside or on the circumcircle of any triangle of f(t), except the triangle 
+                        vertices themselves. If this condition is fulfilled, then the triangulation is always unique for the set of points [1].
+                    </p>
+                    <p>
+                        For instance, if there are 4 points as shown below, there are two possible ways of forming triangles as shown in 
+                        Fig 3(b) and 3(c). However, if the circumcircles are drawn for both cases, it can be seen that the latter does 
+                        not satisfy the Delaunay Triangulation criterion.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:20px;width:100%;vertical-align:middle">
+                    <a href="../../../my_images/projects/featureless_object_detection/fig2.png"><img style="width:65%;max-width:65%" alt="Fig 2" src="../../../my_images/projects/featureless_object_detection/fig2.png" class="hoverZoomLink"></a>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:20px;width:100%;vertical-align:middle">
+                    <a href="../../../my_images/projects/featureless_object_detection/fig3.png"><img style="width:60%;max-width:60%" alt="Fig 3" src="../../../my_images/projects/featureless_object_detection/fig3.png" class="hoverZoomLink"></a>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:20px;width:100%;vertical-align:middle">
+                    <p>
+                        This triangulation method gives a unique form to the object, which could be used to find few intrinsic image properties 
+                        of the object, otherwise featureless in this case. So the basic algorithm used in this technique to detect the object is
+                        as follows.
+                        <br>a. Color segmentation
+                        <br>b. Finding contours
+                        <br>c. Delaunay Triangulation
+                        <br>d. Condition for object detection
+                    </p>
+                    <p>
+                        Intuitively it can be seen that, this method is dependent on the geometry of the object. Since the image is practically
+                        featureless, the object geometry is the most important information that can be used for its detection.
+                    </p>
+                    <p>
+                        <strong>Color Segmentation:</strong>
+                        <br>
+                            The brontosaurus (object to be detected) has uniform color throughout its area, which can be used for finding 
+                            the contours in the image. The image is segmented using the HSV color thresholding. HSV stands for Hue, 
+                            Saturation and Value. The Hue determines the actual color of the pixel, Saturation gives the amount of gray 
+                            value in it and the Value gives the amount of luminance/brightness. The advantage of HSV color thresholding 
+                            is that the effect of luminance/brightness can be controlled by keeping the maximum range of V. The thresholded 
+                            image is then given to the contour finding function.
+                    </p>
+                    <p>
+                        <strong>Finding Contours:</strong>
+                        <br>
+                        This function takes a thresholded image and returns any closed contour that is present in the thresholded image. 
+                        We have added a small area threshold for considering the contour, meaning that the contour for which the area is 
+                        below this threshold would be chopped off from the list. The function returns an array of points for each contour. 
+                        For each contour we calculate the centroids given by,
+                    </p>
+
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:20px;width:100%;vertical-align:middle">
+                    <a href="../../../my_images/projects/featureless_object_detection/eqn1.png"><img style="width:15%;max-width:15%" alt="Eqn 1" src="../../../my_images/projects/featureless_object_detection/eqn1.png" class="hoverZoomLink"></a>
+                <br>
+                where N is the number of points on the contours. We also sample out 500 points for triangulation.
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:20px;width:100%;vertical-align:middle">
+                    <p>
+                        <strong>Delaunay Triangulation:</strong>
+                        <br>
+                        The set of sampled points of the contours along with the contour centroid are sent as an argument to the function 
+                        finding the Delaunay triangles. According to the criterion mentioned above, the triangle coordinates are computed 
+                        and stored in an array. Two algorithms for computing the Delaunay triangles have been discussed in [2]. Once the 
+                        triangles are formed, we compute the centroids of each triangle as shown in Fig. 4(b).
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:20px;width:100%;vertical-align:middle">
+                    <a href="../../../my_images/projects/featureless_object_detection/fig4.png"><img style="width:50%;max-width:50%" alt="Fig 4" src="../../../my_images/projects/featureless_object_detection/fig4.png" class="hoverZoomLink"></a>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:20px;width:100%;vertical-align:middle">
+                    <p>    
+                        <strong>Condition for Object detection:</strong>
+                        <br>
+                        Now we have the triangles and the centroids. This is a
+                        unique representation of the object and it defines the geometric
+                        properties of the object. One of the properties that we have used
+                        for our object detection is the distribution of fixed points in the
+                        object. For implementing this algorithm, the first thing that is
+                        done is defining a base axis of the object which would define
+                        the orientation of the object. In order to achieve this the
+                        following algorithm was implemented.
+                    </p>
+                    <p>
+                        <option>
+                            i. Choose a model image with only the object and find
+                            the centroid of the object.
+                        </option> 
+                        <option>
+                            ii. Find the point on the contour with the maximum
+                            distance from the centroid and find its angle (counterclockwise) 
+                            with respect to the horizontal.
+                        </option>
+                        
+                        <option>
+                            iii. Now in the test image for all the contours find the point
+                            with maximum distance from the contour centroid.
+                            Rotate the line clockwise with the angle found in step ii.
+                        </option>
+                            iv. This forms the base x axis and the axis perpendicular
+                            to it forms the base y axis. This is shown in Fig. 4(b)
+                            Once the base axis is set, the next step is to find the mean
+                            normalised distance from the triangle centroid to the base axes.
+                        <br>
+                        Once the base axis is set, the next step is to find the mean
+                        normalised distance from the triangle centroid to the base axes.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:20px;width:100%;vertical-align:middle">
+                    <a href="../../../my_images/projects/featureless_object_detection/eqn2.png"><img style="width:40%;max-width:40%" alt="Eqn 2" src="../../../my_images/projects/featureless_object_detection/eqn2.png" class="hoverZoomLink"></a>
+                    <br>
+                        The above step is done for the model object and the range
+                        of the mean distances are set. The mean is divided by a
+                        normalizing factor in order to make it scale invariant. In our
+                        case we used the maximum distance from the centroid as the
+                        normalizing factor. This computed mean is used for comparison
+                        with the test image and the object detection is done.
+                    <p>
+                        It was observed that the value of the mean normalized
+                        distance ranged from 0.4 to 0.8. It can be seen from the Fig. 5
+                        that this method is robust to perspective transformation but not
+                        robust to occlusion. Higher the range of the mean normalized
+                        distance, higher is the is the probability of the object getting
+                        matched. However this increases the chance of false positives
+                        getting detected, as seen in the Fig. 5(e)(f) where a kangaroo
+                        with similar shape is being detected as the brontosaur
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:20px;width:100%;vertical-align:middle">
+                    <a href="../../../my_images/projects/featureless_object_detection/fig5.png"><img style="width:50%;max-width:50%" alt="Fig 5" src="../../../my_images/projects/featureless_object_detection/fig5.png" class="hoverZoomLink"></a>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="padding:20px;width:100%;vertical-align:middle">
+                    <heading>Reference</heading>
+                    <p>
+                        [1] Pedro F. Felzenszwalb ‘Representation and Detection of Shapes in Images’, University of Chicago
+                        <br>
+                        [2] D. T. Lowe, B. J. Schachter ‘Two Algorithms for Constructing a Delaunay Triangulation’ in International 
+                        Journal of Computer and Information Sciences, Vol. 9, No. 3, 1980
+                        <br>
+                        [3] OpenCV - https://opencv.org/
+                    </p>
+                </td>
+            </tr>
         </tbody></table>
       </td>
     </tr>
