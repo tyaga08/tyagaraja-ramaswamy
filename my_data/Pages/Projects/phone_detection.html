@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Hi, Jon Here. Please DELETE the two <script> tags below if you use this HTML, otherwise my analytics will track your page -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+  <title>Phone Detection</title>
+  
+  <meta name="author" content="Tyagaraja Ramaswamy">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+  <link rel="icon" type="image/jpg" href="../../../my_images/L.jpg">
+</head>
+
+<body>
+  <table style="width:100%;max-width:800px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+    <tr style="padding:0px">
+      <td style="padding:0px">
+        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+          <tr style="padding:0px">
+              <p style="text-align:center">
+                <name>Phone Detection</name>
+              </p>
+              <p style="text-align:center">
+                <a href="https://github.com/tyaga08/phone_detection">git repo</a>
+              </p>
+          </tr>
+        </tbody></table>
+        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+          <tr>
+              <td style="padding:20px;width:100%;vertical-align:middle">
+                  <heading>Introduction</heading>
+                  <p>
+                    This project is small demonstration of object detection and recognition using classical 
+                    computer vision and machine learning. To put it simply, a computer vision technique called 
+                    'Histogram of Oriented Gradients' was used for creating feature vectors which were used to 
+                    train a model. Then the test images were classified into 'phone' and 'not phone'.
+                  </p>
+              </td>
+          </tr>
+          <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <heading>Methodology</heading>
+              <p>
+                First and foremost the dataset needs to be classified into positive and negative images. The positive
+                images are those that contain only the object that is to be detected. The negative images are a
+                collection of images that contain anything but the object to be detected. Generally the number of
+                negative images should be greater than the number of positive images. The dataset can be divided in a
+                ratio of 60:20:20 for training, validation and testing (recommended) or just 80:20 for training and testing.
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <a href="../../../my_images/projects/phone_detection/raw_img1.jpg"><img style="width:50%;max-width:50%" alt="Img1" src="../../../my_images/projects/phone_detection/raw_img1.jpg" class="hoverZoomLink"></a>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <p>
+                The image to be classified looks something like the picture above. The size of the object is quite small
+                compared to the background. First the image is resized such that the height and width of the image are same.
+                The positive image is cropped from this image and that part is replaced with a mask to get the negative image. 
+                Now, before finding the HOG feature vector, for each image, the negative image is divided into multiple grids 
+                such that size of each grid is the same as that of the positive image.
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <a href="../../../my_images/projects/phone_detection/actual_img1.jpg"><img style="width:40%;max-width:40%" alt="Img1" src="../../../my_images/projects/phone_detection/actual_img1.jpg" class="hoverZoomLink"></a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <a href="../../../my_images/projects/phone_detection/positive_img1.png"><img style="width:5%;max-width:5%" alt="Img1" src="../../../my_images/projects/phone_detection/positive_img1.png" class="hoverZoomLink"></a>
+              <br>
+              Positive image
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <a href="../../../my_images/projects/phone_detection/negative_img1.png"><img style="width:40%;max-width:40%" alt="Img1" src="../../../my_images/projects/phone_detection/negative_img1.png" class="hoverZoomLink"></a>
+              <br>
+              Negative image. The brown part is the mask
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <p>
+                Once the preprocessing is done, the HOG Feature vectors are created for these images. Go to the link for a good resource to understand 
+                how the <a href="https://www.learnopencv.com/histogram-of-oriented-gradients/">Histogram of Oriented Gradients</a> work.
+                After getting the HOG feature vectors for these images, they are fed to a Support Vector Classifier using the 
+                <a href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html">scikit-learn</a>. A short intro to 
+                <a href="https://www.analyticsvidhya.com/blog/2017/09/understaing-support-vector-machine-example-code">SVM</a>. We have used
+                polynomial kernel of degree 3. It performed the best out of all.
+                This fits the data to a model that can be later used predict whether the object to be detected (phone) is present in the
+                image or not.
+              </p>
+              <p>
+                But the work is not yet done. The model still contains a lot false positives. In order to get rid of the same, we use
+                a method called Hard Negative Mining. As the name suggests, we mine for false positives, i.e. those images that actually
+                don't contain the object yet have been identified as positive by our model. So we run a predictor using the model we 
+                just created on the negative images. And the images for which we get the predictor output as positive image, we add 
+                that image's feature vector to the negative feature vectors and again train the model. Now the new trained model is 
+                robust to false positives. This model is saved as a .joblib file that can be imported later for predicting whether the 
+                phone is present or not.
+              </p>
+              <p>
+                Now for detecting whether a phone is present in a given image or not, the image is again divided into same number of 
+                grids like the traning stage. HOG feature vectors are found for all the grids and fed to the model for prediction. If
+                prediction is false for all the grids, then it means that the phone is not observed in the image. If there are multiple
+                adjoining grid cells with prediction true, the cell with maximum probability is selected as the location of the phone.
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <a href="../../../my_images/projects/phone_detection/img1_enlarged.png"><img style="width:40%;max-width:40%" alt="Img1" src="../../../my_images/projects/phone_detection/img1_enlarged.png" class="hoverZoomLink"></a>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <a href="../../../my_images/projects/phone_detection/img2_enlarged.png"><img style="width:40%;max-width:40%" alt="Img2" src="../../../my_images/projects/phone_detection/img2_enlarged.png" class="hoverZoomLink"></a>
+            </td>
+          </tr>
+          
+          <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <p>
+                The accuracy without the hard negative mining was about 64% and that with the hard negative mining was almost 96%.
+              </p>
+            </td>
+          </tr>
+
+        </tbody></table>
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>

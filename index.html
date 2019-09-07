@@ -65,6 +65,37 @@
           <tr onmouseout="dpzlearn_stop()" onmouseover="dpzlearn_start()">
             <td style="padding:20px;width:25%;vertical-align:middle">
               <div class="one">
+                <div class="two" id='phone_detection'><img src='my_images/projects/phone_detection/img1.png'></div>
+                <img src='my_images/projects/phone_detection/img1.png'>
+              </div>
+              <script type="text/javascript">
+                function dpzlearn_start() {
+                  document.getElementById('phone_detection').style.opacity = "1";
+                }
+
+                function dpzlearn_stop() {
+                  document.getElementById('phone_detection').style.opacity = "0";
+                }
+                dpzlearn_stop()
+              </script>
+            </td>
+            <td style="padding:20px;width:75%;vertical-align:middle">
+              <a href="my_data/Pages/Projects/phone_detection.html">
+                <projectname>Phone Detection</projectname>
+              </a>
+              <br>
+              <em>WPI, 2019</em>
+              <p></p>
+              <p>
+                This project is a small demonstration of using Computer Vision and Machine learning for object detection; in this case
+                phone detection
+              </p>
+            </td>
+          </tr>
+          
+          <tr onmouseout="dpzlearn_stop()" onmouseover="dpzlearn_start()">
+            <td style="padding:20px;width:25%;vertical-align:middle">
+              <div class="one">
                 <div class="two" id='featureless_object_detection'><img src='my_images/projects/featureless_object_detection/dino1.png'></div>
                 <img src='my_images/projects/featureless_object_detection/dino1.png'>
               </div>
