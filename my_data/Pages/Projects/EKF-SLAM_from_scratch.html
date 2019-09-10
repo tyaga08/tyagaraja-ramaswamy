@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Hi, Jon Here. Please DELETE the two <script> tags below if you use this HTML, otherwise my analytics will track your page -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+  <title>Implementation of EKF SLAM for indoor navigation</title>
+  
+  <meta name="author" content="Tyagaraja Ramaswamy">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+  <link rel="icon" type="image/jpg" href="../../../my_images/L.jpg">
+</head>
+
+<body>
+  <table style="width:100%;max-width:800px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+    <tr style="padding:0px">
+      <td style="padding:0px">
+        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+          <tr style="padding:0px">
+              <p style="text-align:center">
+                <name>Implementation of EKF SLAM for indoor navigation</name>
+              </p>
+              <p style="text-align:center">
+                <a href="https://github.com/tyaga08/SLAM_from_scratch">git repo</a>
+              </p>
+          </tr>
+        </tbody></table>
+        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+            <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <heading>Introduction</heading>
+              <p>
+                This project aims at implementing EKF based
+                online SLAM for mobile robots in indoor environment. We use
+                data from 2D Lidar and wheel encoder to estimate the state
+                of the robot and use EKF based filtering techniques to build
+                a map. We would use ROS and Gazebo for simulation of our
+                implementation.
+              </p>
+            </td>
+          </tr>
+          <tr>
+              <td style="padding:20px;width:100%;vertical-align:middle">
+                <heading>Methodology</heading>
+                <p>
+                  The methodology followed is mentioned below:
+                  <br>
+                  • Give the input to the robot
+                  <br>
+                  • Collect the sensor data (LIDAR/odometry).
+                  <br>
+                  • Perform sensor fusion on the data
+                  <br>
+                  • Extract Features from the LIDAR Data
+                  <br>
+                  • Add new features into the database
+                  <br>
+                  • For existing features, send the position information to
+                  the kalman update step
+                  <br>
+                  • Calculate the kalman gain
+                  <br>
+                  • Calculate the new estimate based on previous estimate
+                  and measured value
+                  <br>
+                  • Update the map with the new information
+                  <br>
+                  • Do the above steps till the loop closure is attained
+                  <br>
+                  • Repeat the steps to improve the accuracy of the map
+                </p>
+                <p>
+                  <strong>1. Landmark Extraction:</strong>
+                  <br>
+                  The simulator environment which we have created has
+                  cylindrical pillars as landmarks which should be extracted
+                  from the sensor data. Whenever there is a cylinder in the
+                  environment, the rays hitting the cylinder will have a range
+                  value different from the others. This changes can be found
+                  out by taking the derivatives of the sensor data and finding
+                  the spikes in the data.So,the derivatives of the sensor data are
+                  calculated at each instant and stored in a list. The start of the
+                  cylinder can be found by finding the negative spike whereas
+                  the end of the cylinder can be found out by positive spike. We
+                  should also consider the case of overlapping cylinders which
+                  might give multiple spikes. These edge cases also addressed
+                  in the algorithm given below. So, the Algorithm 1 explains
+                  the extraction of the landmark position by finding spikes in
+                  the environment
+                  <br>
+                  <a href="../../../my_images/projects/EKF-SLAM_from_scratch/landmark_extraction.png"><img style="width:50%;max-width:50%" alt="Algorithm-1" src="../../../my_images/projects/EKF-SLAM_from_scratch/landmark_extraction.png" class="hoverZoomLink"></a>
+                </p>
+                <p>
+                  <strong>2. Extended Kalman Filter</strong>
+                  <br>
+                  The sensor data used for state estimation, being noisy,
+                  gives rise to accumulated errors. There are several techniques
+                  to reduce the error and one of the well established methods
+                  is to use recursive probabilistic filters. The Bayes filter is
+                  a recursive probabilistic filter which uses a prior belief and
+                  applies Bayes theorem to get a posterior estimate.
+                  <br>
+                  <a href="../../../my_images/projects/EKF-SLAM_from_scratch/Bayes_thm.png"><img style="width:50%;max-width:50%" alt="Bayes Thm" src="../../../my_images/projects/EKF-SLAM_from_scratch/Bayes_thm.png" class="hoverZoomLink"></a>
+                  <br>
+                  Kalman Filter is a variant of the Bayes filter where,
+                  the states are considered as a Gaussian distribution with a
+                  mean around the actual value and an uncertainty defined by
+                  the covariance. The problem with Kalman Filter is that it
+                  cannot be applied to non-linear systems. In order to use this
+                  methodology to non-linear systems, the system is linearized
+                  using Taylor’s expansion or Jacobian Linearization. This
+                  method is called Extended Kalman Filter.
+                  <br>
+                  The Extended Kalman Filter has two steps: (a) prediction
+                  step and (b) correction step. In the prediction step, the current
+                  state is predicted using the previous state and the current
+                  input. This gives us a belief of our current state with some
+                  uncertainty. This uncertainty is reduced after the correction
+                  step. In this step, sensor measurement data is used to correct
+                  our predicted belief. The prediction step is also called Motion
+                  Model and the correction step is also called Observation
+                  Model.
+                </p>
+                
+              </td>
+          </tr>
+        </tbody></table>
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>
