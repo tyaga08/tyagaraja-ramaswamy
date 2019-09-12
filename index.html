@@ -192,6 +192,39 @@
               </p>
             </td>
           </tr>
+
+          <tr onmouseout="dpzlearn_stop()" onmouseover="dpzlearn_start()">
+              <td style="padding:20px;width:25%;vertical-align:middle">
+                <div class="one">
+                  <div class="two" id='Sketching using JACO arm'><img src='my_images/projects/JACO_arm/cover_pic_resized.png'></div>
+                  <img src='my_images/projects/JACO_arm/cover_pic_resized.png'>
+                </div>
+                <script type="text/javascript">
+                  function dpzlearn_start() {
+                    document.getElementById('Sketching using JACO arm').style.opacity = "1";
+                  }
+  
+                  function dpzlearn_stop() {
+                    document.getElementById('Sketching using JACO arm').style.opacity = "0";
+                  }
+                  dpzlearn_stop()
+                </script>
+              </td>
+              <td style="padding:20px;width:75%;vertical-align:middle">
+                <a href="my_data/Pages/Projects/sketching_using_JACO_arm.html">
+                  <projectname>Sketching Geometric Shapes using KINOVA 6-DOF JACO arm</projectname>
+                </a>
+                <br>
+                <em>WPI, 2018</em>
+                <p></p>
+                <p>
+                    The aim of this priject is to analyse the ease of movement of
+                    the JACO 6-DOF arm. A geometric shape is given to the system as an input and a
+                    trajectory is planned for the robot so that it draws the geometric
+                    shape.
+                </p>
+              </td>
+            </tr>
         </tbody></table>
         
       </td>
