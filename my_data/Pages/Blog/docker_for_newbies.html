@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Hi, Jon Here. Please DELETE the two <script> tags below if you use this HTML, otherwise my analytics will track your page -->
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+
+  <title>Docker for newbies</title>
+  
+  <meta name="author" content="Tyagaraja Ramaswamy">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+  <link rel="icon" type="image/jpg" href="../../../my_images/L.jpg">
+</head>
+
+<body>
+  <table style="width:100%;max-width:800px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+    <tr style="padding:0px">
+      <td style="padding:0px">
+        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+          <tr style="padding:0px">
+              <p style="text-align:center">
+                <name>Docker for newbies</name>
+              </p>
+          </tr>
+        </tbody></table>
+        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+            <tr>
+            <td style="padding:20px;width:100%;vertical-align:middle">
+              <heading>Setup</heading>
+              <p>
+                1. For linux systems, docker can be easily installed using the Package Manager (apt or apt-get for Ubuntu)
+                <br><br>
+                <strong>sudo apt-get update</strong> <br>
+                <strong>sudo apt-get install docker.io</strong>
+                <br><br>
+                2. Now we need to enable docker to start at the startup of OS
+                <br><br>
+                <strong>sudo systemctl start docker</strong><br>
+                <strong>sudo systemctl enable docker</strong>
+                <br><br>
+                3. Now reboot your computer and check if docker is installed properly.
+                <br><br>
+                <strong>docker --version</strong>
+                <br><br>
+                The version should look something like this.<br><br>
+                <a href="../../../my_images/blog/docker_for_newbies/docker-version.png"><img style="width:50%;max-width:50%" alt="docker-version" src="../../../my_images/blog/docker_for_newbies/docker-version.png" class="hoverZoomLink"></a>
+              </p>
+            </td>
+          </tr>
+          <tr>
+              <td style="padding:20px;width:100%;vertical-align:middle">
+                <heading>Debugging</heading>
+                <p>
+                  1. Error showing 'permission denied' while trying to connect to docker socket - /var/run/docker.sock
+                  <br> Solution: The error message tells that the current user doesn't have admin access to the docker engine.
+                  There are 2 ways to tackle this.
+                  <br><br>
+                  a) write <strong>sudo</strong> before the command.
+                  <br><br>
+                  b) <strong>sudo usermod -a -G docker $USER</strong>
+                  <br><br>The second is a better and permanent solution
+                </p>
+              </td>
+          </tr>
+        </tbody></table>
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>
